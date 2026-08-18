@@ -109,8 +109,14 @@ This guide is based on current official Bexio and n8n documentation plus general
 - [n8n HTTP Request node](https://docs.n8n.io/integrations/builtin/core-nodes/n8n-nodes-base.httprequest/)
 - [n8n HTTP Request credentials](https://docs.n8n.io/integrations/builtin/credentials/httprequest/)
 
-## Need help with a small n8n/API integration?
+## Need help with a small n8n/Bexio integration?
 
-For small, clearly scoped n8n/API integration or troubleshooting work:
+If you have a small, clearly scoped Bexio/API automation request, you can open a structured request here:
+
+<https://github.com/weissalexey/aw-n8n-workflow-help/issues/new?template=bexio-n8n-integration-request.md>
+
+Please do not include passwords, access tokens, customer-sensitive data, or other secrets in a public GitHub issue.
+
+General AW Automation service information:
 
 <https://weissalexey.github.io/aw-n8n-workflow-help/>
