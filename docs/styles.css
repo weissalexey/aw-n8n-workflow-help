@@ -28,3 +28,7 @@ section h2 { font-size: 1.25rem; margin-bottom: .8rem; color: #1a1a2e; }
 .examples a { color: #2563eb; word-break: break-all; }
 .security-note { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 1rem; border-radius: 0 6px 6px 0; font-size: .9rem; }
 footer { text-align: center; padding: 2rem 0; font-size: .8rem; color: #888; }
+
+.faq-section .faq-item { margin-bottom: 1.2rem; }
+.faq-section .faq-item h3 { font-size: 1rem; margin-bottom: 0.3rem; color: #1a1a2e; }
+.faq-section .faq-item p { font-size: 0.9rem; color: #444; }
