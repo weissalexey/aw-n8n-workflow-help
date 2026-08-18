@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free n8n Workflow JSON Quick Check | AW Automation</title>
+<meta name="description" content="Free browser-based n8n workflow JSON checker for node counts, triggers, credentials references, HTTP requests, code nodes, disabled nodes, expressions, and basic structural warnings.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://weissalexey.github.io/aw-n8n-workflow-help/audit/">
+<link rel="stylesheet" href="../styles.css">
+<meta property="og:title" content="Free n8n Workflow JSON Quick Check | AW Automation">
+<meta property="og:description" content="Free browser-based n8n workflow JSON checker for node counts, triggers, credentials references, HTTP requests, code nodes, disabled nodes, expressions, and basic structural warnings.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://weissalexey.github.io/aw-n8n-workflow-help/audit/">
+<style>
+.audit-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.2rem; margin-bottom: 1rem; }
+.audit-card h3 { font-size: 1rem; margin-bottom: 0.5rem; color: #1a1a2e; }
+.audit-table { width: 100%; border-collapse: collapse; }
+.audit-table td { padding: 0.3rem 0.5rem; border-bottom: 1px solid #f0f0f0; font-size: 0.9rem; }
+.audit-table td:first-child { font-weight: 600; color: #444; width: 55%; }
+.audit-table td:last-child { color: #1a1a2e; }
+.audit-card ul { padding-left: 1.4rem; margin-top: 0.3rem; }
+.audit-card li { font-size: 0.9rem; color: #444; padding: 0.15rem 0; }
+.audit-input-area { margin-bottom: 1rem; }
+.audit-input-area textarea { width: 100%; min-height: 180px; font-family: monospace; font-size: 0.85rem; padding: 0.8rem; border: 1px solid #d1d5db; border-radius: 6px; resize: vertical; }
+.audit-input-area label { display: block; font-size: 0.9rem; font-weight: 600; margin-bottom: 0.4rem; color: #1a1a2e; }
+.audit-btn-row { display: flex; gap: 0.6rem; margin-bottom: 0.5rem; flex-wrap: wrap; }
+.audit-btn-row button { padding: 0.5rem 1.2rem; border-radius: 6px; border: 1px solid #d1d5db; font-size: 0.9rem; cursor: pointer; font-weight: 600; }
+#analyze-btn { background: #2563eb; color: #fff; border-color: #2563eb; }
+#analyze-btn:hover { background: #1d4ed8; }
+#clear-btn { background: #f3f4f6; color: #444; }
+#clear-btn:hover { background: #e5e7eb; }
+.download-btn { background: #16a34a; color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 6px; cursor: pointer; font-size: 0.9rem; font-weight: 600; }
+.download-btn:hover { background: #15803d; }
+.privacy-note { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 0.8rem; border-radius: 0 6px 6px 0; font-size: 0.85rem; margin-bottom: 1rem; }
+.privacy-note strong { color: #92400e; }
+.audit-cta { background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px; padding: 1.2rem; margin-top: 1.5rem; }
+.audit-cta h3 { font-size: 1rem; margin-bottom: 0.4rem; }
+.audit-cta p { font-size: 0.9rem; color: #444; margin-bottom: 0.3rem; }
+.audit-cta a { color: #2563eb; }
+.back-link { display: inline-block; margin-bottom: 1rem; font-size: 0.9rem; color: #2563eb; }
+</style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "n8n Workflow JSON Quick Check",
+  "applicationCategory": "DeveloperApplication",
+  "operatingSystem": "Web browser",
+  "url": "https://weissalexey.github.io/aw-n8n-workflow-help/audit/",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "AW Automation"
+  }
+}
+</script>
+</head>
+<body>
+<header>
+<div class="container">
+<h1>n8n Workflow JSON Quick Check</h1>
+<p class="brand">AW Automation</p>
+</div>
+</header>
+
+<div class="container">
+<a class="back-link" href="../">&larr; Back to n8n Workflow Fix &amp; API Integration</a>
+
+<section>
+<p>Free browser-based structural check for exported n8n workflow JSON.</p>
+<div class="privacy-note">
+<strong>Your workflow stays in your browser.</strong> This page does not upload the JSON anywhere.
+</div>
+<p style="font-size:0.85rem;color:#666;margin-bottom:1rem;">This is a structural quick check, not a live n8n runtime/import test.</p>
+
+<div class="audit-input-area">
+<label for="workflow-file">Load workflow JSON file:</label>
+<input type="file" id="workflow-file" accept=".json,application/json">
+</div>
+
+<div class="audit-input-area">
+<label for="workflow-text">Or paste exported n8n workflow JSON:</label>
+<textarea id="workflow-text" placeholder="Paste your n8n workflow JSON here..."></textarea>
+</div>
+
+<div class="audit-btn-row">
+<button id="analyze-btn">Analyze workflow</button>
+<button id="clear-btn">Clear</button>
+</div>
+
+<p style="font-size:0.8rem;color:#666;margin-bottom:1rem;">Before sharing a workflow publicly, remove credentials, tokens, customer data, and other confidential values. Never send the input to a server.</p>
+
+<div id="results"></div>
+
+<div class="audit-cta">
+<h3>Need help fixing the workflow?</h3>
+<p>If the quick check points to something you want help with, AW Automation handles small, bounded n8n workflow fixes and API integrations.</p>
+<p>Starter reference scope: <strong>USD 55</strong> after scope confirmation.</p>
+<p><a href="https://github.com/weissalexey/aw-n8n-workflow-help/issues/new?template=workflow-fix.md">Request help via GitHub Issues</a></p>
+<p style="font-size:0.8rem;color:#666;">Do not paste credentials or confidential customer data into a public GitHub issue.</p>
+</div>
+</section>
+
+<footer>
+<p>AW Automation &mdash; <a href="../">n8n Workflow Fix &amp; API Integration</a></p>
+</footer>
+</div>
+
+<script src="audit.js"></script>
+</body>
+</html>

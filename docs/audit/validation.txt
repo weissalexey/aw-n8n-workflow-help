@@ -1,0 +1,28 @@
+Validation Results — n8n Workflow JSON Quick Check
+Date: 2026-08-18
+
+A. Static checks:
+  audit/index.html exists: PASS
+  audit/audit.js exists: PASS
+  canonical correct (https://weissalexey.github.io/aw-n8n-workflow-help/audit/): PASS
+  no external workflow-upload network code: PASS
+  no eval: PASS
+  no Function constructor: PASS
+  CTA URLs correct: PASS
+  USD 55 exact: PASS
+
+B. JavaScript syntax:
+  node --check audit.js: PASS
+
+C. Analyzer behavior (3 synthetic workflows):
+  Test 1 (Webhook -> HTTP Request -> RespondToWebhook): PASS
+  Test 2 (disabled node + credential + Code node): PASS
+  Test 3 (empty object / no nodes): PASS
+  Test 4 (sensitive key detection): PASS
+  Tests passed: 4/4
+
+D. Privacy:
+  Summary does not include synthetic password/token values: PASS
+  No values leaked in JSON.stringify of result: PASS
+
+No live n8n runtime testing performed.
