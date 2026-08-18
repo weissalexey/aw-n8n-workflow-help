@@ -54,6 +54,27 @@ Final scope and payment method must be agreed before paid work begins.
 - **Free Transport Request Intake Lite workflow:** <https://github.com/weissalexey/aw-transport-request-intake-demo/tree/main/free>
 - **Open-source safety hook PR:** <https://github.com/claude-builders-bounty/claude-builders-bounty/pull/3761> (open-source contribution currently under review)
 
+
+## n8n Workflow Audit GitHub Action
+
+Static validation tool for exported n8n workflow JSON files. Checks structure, portability issues, and potential hardcoded secrets without executing workflows.
+
+**Local CLI:**
+
+    python tools/n8n_workflow_audit.py --path "workflows/*.json"
+    python tools/n8n_workflow_audit.py --path "workflow.json" --strict
+
+**GitHub Actions:**
+
+    - name: Audit n8n workflows
+      uses: weissalexey/aw-n8n-workflow-help@v1
+      with:
+        path: "workflows/*.json"
+
+**Exit codes:** 0 = passed, 1 = structural errors, 2 = warnings in strict mode, 3 = no files matched.
+
+**Note:** This tool performs static checks only. It does not execute workflows. Findings are diagnostics and do not guarantee workflow security or correctness.
+
 ## About
 
 AW Automation focuses on small practical automations that can be scoped, tested, and handed over clearly.

@@ -1,0 +1,28 @@
+name: "n8n Workflow Audit"
+description: "Static validation of exported n8n workflow JSON files. Checks structure, portability, and potential secrets without executing workflows."
+author: "AW Automation"
+
+branding:
+  icon: "check-circle"
+  color: "blue"
+
+inputs:
+  path:
+    required: true
+    description: "Path to n8n workflow JSON file(s) or a glob pattern (e.g. workflows/*.json)"
+  strict:
+    required: false
+    default: "false"
+    description: "If true, exit with code 2 when warnings are found even without structural errors"
+
+runs:
+  using: "composite"
+  steps:
+    - name: Run n8n Workflow Audit
+      shell: bash
+      run: |
+        STRICT_FLAG=""
+        if [ "${{ inputs.strict }}" = "true" ]; then
+          STRICT_FLAG="--strict"
+        fi
+        python "$GITHUB_ACTION_PATH/tools/n8n_workflow_audit.py" --path "${{ inputs.path }}" $STRICT_FLAG
