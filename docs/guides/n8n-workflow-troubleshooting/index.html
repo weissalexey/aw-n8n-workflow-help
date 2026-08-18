@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How to Troubleshoot an n8n Workflow Before Import | AW Automation</title>
+<meta name="description" content="A practical checklist for troubleshooting exported n8n workflow JSON before import: nodes, triggers, credentials, webhooks, HTTP requests, expressions, Code nodes, disabled nodes, and structural checks.">
+<meta name="robots" content="index,follow">
+<link rel="canonical" href="https://weissalexey.github.io/aw-n8n-workflow-help/guides/n8n-workflow-troubleshooting/">
+<link rel="stylesheet" href="../../styles.css">
+<meta property="og:title" content="How to Troubleshoot an n8n Workflow Before Import | AW Automation">
+<meta property="og:description" content="A practical checklist for troubleshooting exported n8n workflow JSON before import: nodes, triggers, credentials, webhooks, HTTP requests, expressions, Code nodes, disabled nodes, and structural checks.">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://weissalexey.github.io/aw-n8n-workflow-help/guides/n8n-workflow-troubleshooting/">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How to Troubleshoot an n8n Workflow Before Import",
+  "author": {
+    "@type": "Organization",
+    "name": "AW Automation"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "AW Automation"
+  },
+  "mainEntityOfPage": "https://weissalexey.github.io/aw-n8n-workflow-help/guides/n8n-workflow-troubleshooting/",
+  "datePublished": "2026-08-18",
+  "dateModified": "2026-08-18",
+  "description": "A practical checklist for troubleshooting exported n8n workflow JSON before import: nodes, triggers, credentials, webhooks, HTTP requests, expressions, Code nodes, disabled nodes, and structural checks."
+}
+</script>
+</head>
+<body>
+<header>
+<div class="container">
+<h1>How to Troubleshoot an n8n Workflow Before Import</h1>
+<p class="brand">AW Automation</p>
+</div>
+</header>
+<div class="container">
+<a class="back-link" href="../../">&larr; Back to n8n Workflow Fix &amp; API Integration</a>
+<section>
+<div class="card" style="margin-bottom:1.5rem;">
+<h3>Free tool: n8n Workflow JSON Quick Check</h3>
+<p>Run a browser-local structural check on your exported workflow JSON before diving into manual review. <a href="../../audit/">Try the Quick Check</a></p>
+</div>
+<p>When you receive an exported n8n workflow JSON file, you can often spot structural problems before spending time debugging inside a live instance. A static JSON review cannot prove that the workflow will execute successfully, but it can surface missing nodes, broken credential references, and environment-specific assumptions that would otherwise only fail at runtime.</p>
+<p>This guide walks through a practical pre-import review process you can apply to any exported n8n workflow.</p>
+</section>
+<section>
+<h2>1. Confirm the JSON is structurally valid</h2>
+<p>The file must parse as valid JSON. If the JSON is malformed, n8n cannot import it at all. Open the file in a text editor or paste it into a JSON validator to confirm it parses without errors.</p>
+<p>Valid n8n workflow JSON typically contains top-level fields such as <code>name</code>, <code>nodes</code>, <code>connections</code>, and <code>settings</code>, but the exact structure can vary by n8n version and export method. Do not assume a single universal schema.</p>
+</section>
+<section>
+<h2>2. Count and review nodes</h2>
+<p>Look at the <code>nodes</code> array and count the entries. Compare this against what you expect the workflow to contain. Watch for:</p>
+<ul>
+<li>Unexpectedly missing nodes that should be part of the flow</li>
+<li>Nodes with <code>"disabled": true</code> &mdash; these will not execute unless re-enabled</li>
+<li>Unfamiliar or unexpected node types that may not exist in your n8n version</li>
+</ul>
+<p>If a critical processing node is missing or disabled, the workflow will silently skip that step.</p>
+</section>
+<section>
+<h2>3. Find the trigger</h2>
+<p>Every automated workflow needs a trigger node. Common trigger types include:</p>
+<ul>
+<li><strong>Webhook</strong> &mdash; receives HTTP requests from external systems</li>
+<li><strong>Schedule / Cron</strong> &mdash; runs on a time-based interval</li>
+<li><strong>App or service triggers</strong> &mdash; native nodes for platforms like Slack, GitHub, or Google Sheets</li>
+</ul>
+<p>No obvious trigger may be intentional for manually executed workflows or sub-workflow designs. Treat a missing trigger as a review point, not proof of an error.</p>
+</section>
+<section>
+<h2>4. Review credential references</h2>
+<p>Exported workflows reference credentials by ID or name. These references tell you which credential types are needed, but they do not contain the actual secret values.</p>
+<p>Before importing, ensure your destination n8n environment has valid credentials configured for every referenced credential type. A missing credential will cause the affected node to fail at runtime.</p>
+<div class="security-note">
+<p><strong>Security warning:</strong> Never publish real passwords, API keys, OAuth secrets, tokens, or customer credentials. If you are sharing a workflow publicly, remove or replace all credential references first.</p>
+</div>
+</section>
+<section>
+<h2>5. Inspect HTTP Request nodes</h2>
+<p>HTTP Request nodes are common failure points. Review each one for:</p>
+<ul>
+<li><strong>Endpoint URLs</strong> &mdash; are they correct and reachable from your environment?</li>
+<li><strong>HTTP method</strong> &mdash; does the method match the API expectation (GET, POST, PUT, DELETE)?</li>
+<li><strong>Headers, query parameters, and body</strong> &mdash; are required fields present?</li>
+<li><strong>Authentication dependencies</strong> &mdash; does the request rely on a credential or header-based auth?</li>
+<li><strong>Plain <code>http://</code> references</strong> &mdash; these may fail behind HTTPS-only proxies or strict security policies</li>
+<li><strong>Environment-specific or local URLs</strong> &mdash; addresses like <code>localhost</code> or private IPs will not work in a different environment</li>
+</ul>
+<p>Do not assume an endpoint works merely because it appears in the JSON. The URL may have been valid when the workflow was exported but could be outdated or environment-specific.</p>
+</section>
+<section>
+<h2>6. Review Webhook / Respond to Webhook structure</h2>
+<p>A webhook-triggered workflow may use different response modes:</p>
+<ul>
+<li><strong>Waiting for Webhook</strong> &mdash; the workflow pauses at the trigger until a second request arrives</li>
+<li><strong>Immediately</strong> &mdash; the workflow responds right away</li>
+</ul>
+<p>If the workflow is expected to return an HTTP response to the caller, a <strong>Respond to Webhook</strong> node should typically be present. However, not every webhook workflow requires one &mdash; some workflows process data asynchronously without sending a direct response. Review the intended response mode against the actual node structure.</p>
+</section>
+<section>
+<h2>7. Review Code / Function nodes</h2>
+<p>Code nodes (formerly Function nodes) contain custom JavaScript that runs during execution. You can review the code for:</p>
+<ul>
+<li>Assumptions about input data structure and field names</li>
+<li>Referenced external libraries or APIs</li>
+<li>Side effects such as file writes, database calls, or external HTTP requests</li>
+</ul>
+<p>Custom JS can cause runtime behavior that is impossible to fully validate from the JSON alone. Never execute embedded code merely to inspect a workflow &mdash; review it statically.</p>
+</section>
+<section>
+<h2>8. Review expressions</h2>
+<p>n8n expressions (using double-curly-brace syntax) reference data from upstream nodes. When reviewing expressions:</p>
+<ul>
+<li>Check that referenced field names match the expected output of upstream nodes</li>
+<li>Large numbers of expressions are not inherently a problem &mdash; complex workflows naturally use many</li>
+<li>Expressions depend on runtime context, so some issues will only surface during actual execution</li>
+</ul>
+<p>After import, verify that expressions resolve correctly with real data.</p>
+</section>
+<section>
+<h2>9. Check connections</h2>
+<p>The <code>connections</code> object defines how nodes are linked. Review it for:</p>
+<ul>
+<li>Disconnected nodes that may be intentional but deserve verification</li>
+<li>Expected flow between the trigger, processing nodes, and output nodes</li>
+<li>Nodes that appear in the <code>nodes</code> array but have no incoming or outgoing connections</li>
+</ul>
+<p>A disconnected processing node will never execute, even if it is correctly configured.</p>
+</section>
+<section>
+<h2>10. Look for environment-specific assumptions</h2>
+<p>Workflows often contain assumptions about the environment they were built in. Watch for:</p>
+<ul>
+<li><code>localhost</code> or private IP addresses in URLs</li>
+<li>Webhook base URLs that point to a specific n8n instance</li>
+<li>Environment-specific API endpoints (staging vs. production)</li>
+<li>Credential names that may differ between environments</li>
+<li>References to external systems that may not be accessible from your network</li>
+</ul>
+<p>These assumptions are often the root cause of workflows that work for one person but fail for another.</p>
+</section>
+<section>
+<h2>Quick checklist</h2>
+<div class="card">
+<ul style="list-style: none; padding: 0;">
+<li>&#9744; JSON parses without errors</li>
+<li>&#9744; Expected nodes are present and not unexpectedly disabled</li>
+<li>&#9744; A trigger node exists (or absence is intentional)</li>
+<li>&#9744; All credential types are available in the destination environment</li>
+<li>&#9744; HTTP Request endpoints are correct and reachable</li>
+<li>&#9744; Webhook response mode matches the intended behavior</li>
+<li>&#9744; Code node logic has been reviewed statically</li>
+<li>&#9744; Expression field references look correct</li>
+<li>&#9744; All nodes are properly connected</li>
+<li>&#9744; Environment-specific URLs and assumptions have been identified</li>
+</ul>
+</div>
+</section>
+<section>
+<h2>Free browser-local quick check</h2>
+<p>Before doing a manual review, you can run an automated structural check using the <strong>n8n Workflow JSON Quick Check</strong>. The tool runs entirely in your browser &mdash; your workflow JSON is never uploaded anywhere.</p>
+<p><a href="../../audit/">Try the n8n Workflow JSON Quick Check</a></p>
+<p style="font-size:0.85rem;color:#666;">This is a structural diagnostic only. It does not guarantee that the workflow will execute or import successfully.</p>
+</section>
+<section>
+<h2>When structural checking is not enough</h2>
+<p>A static JSON review has limits. The following issues can only be identified by running the workflow in a real n8n environment:</p>
+<ul>
+<li>Credential authentication and token validity</li>
+<li>Actual API behavior and response formats</li>
+<li>Runtime expression evaluation with real data</li>
+<li>Node-version compatibility between export and import environments</li>
+<li>Full workflow execution flow and error handling</li>
+<li>External service responses and rate limits</li>
+</ul>
+<p>If the structural review looks clean but the workflow still fails after import, the issue is likely runtime-specific and requires testing in a live environment.</p>
+</section>
+<section>
+<h2>Need help with a workflow?</h2>
+<p>If you want help with one clearly scoped n8n workflow fix or API integration, AW Automation accepts initial scoping through GitHub Issues.</p>
+<p><a href="https://github.com/weissalexey/aw-n8n-workflow-help/issues/new?template=workflow-fix.md">Request help via GitHub Issues</a></p>
+<p>Starter reference scope: <strong>USD 55</strong> after scope confirmation.</p>
+<p style="font-size:0.85rem;color:#666;">Do not post credentials or confidential customer data in a public GitHub issue.</p>
+</section>
+<section>
+<p><a href="../../">n8n Workflow Fix &amp; API Integration</a></p>
+</section>
+<footer>
+<p>AW Automation &mdash; n8n Workflow Fix &amp; API Integration</p>
+</footer>
+</div>
+</body>
+</html>
