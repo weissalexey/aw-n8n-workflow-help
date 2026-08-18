@@ -48,6 +48,7 @@ Initial scoping can happen through GitHub Issues while the standalone AW project
 Final scope and payment method must be agreed before paid work begins.
 
 ## Public work examples
+- **Bexio + n8n** [n8n + Bexio API Integration: A Practical Readiness Checklist](guides/n8n-bexio-api-integration-readiness.md)
 
 - **Transport Request Intake Starter demo:** <https://weissalexey.github.io/aw-transport-request-intake-demo/>
 - **Free Transport Request Intake Lite workflow:** <https://github.com/weissalexey/aw-transport-request-intake-demo/tree/main/free>
