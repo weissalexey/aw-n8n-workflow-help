@@ -26,3 +26,37 @@ D. Privacy:
   No values leaked in JSON.stringify of result: PASS
 
 No live n8n runtime testing performed.
+
+
+---
+Validation Addendum: Privacy-Safe Issue Prefill
+Date: 2026-08-19
+
+A. Safe issue prefill implemented:
+  buildSafeIssueSummary() pure function: PASS
+  buildWorkflowHelpIssueUrl() pure function: PASS
+  GitHub issue is NOT automatically submitted: PASS
+  User sees GitHub issue composer and decides whether to submit: PASS
+
+B. Privacy exclusions verified by design and test:
+  workflow name excluded from summary: PASS
+  raw workflow JSON excluded from summary: PASS
+  node names/parameter values excluded from summary: PASS
+  endpoint URLs excluded from summary: PASS
+  credential IDs excluded from summary: PASS
+  credential names (display names) excluded from summary: PASS
+  credential type names (structural keys) allowed: PASS
+
+C. Synthetic secret-leak test:
+  Test workflow with synthetic password/token/credential name/endpoint: PASS
+  No synthetic secrets leaked into issue body or URL: PASS
+
+D. Node.js syntax check:
+  node --check docs/audit/audit.js: PASS
+
+E. Synthetic test count: 3 (normal, sensitive, empty)
+
+F. Live n8n runtime test remains NOT performed.
+
+Privacy-safe structural summary by design and test.
+NOT guaranteed secure.
